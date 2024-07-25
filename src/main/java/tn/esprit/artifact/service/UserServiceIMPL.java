@@ -36,6 +36,12 @@ public class UserServiceIMPL implements IUserService {
             if (user.getMdp() != null) {
                 existingUser.setMdp(user.getMdp());
             }
+            if (user.getEmail() != null) {
+                existingUser.setEmail(user.getEmail());
+            }
+            if (user.getNumber() != null) {
+                existingUser.setNumber(user.getNumber());
+            }
             if (user.getNom() != null) {
                 existingUser.setNom(user.getNom());
             }

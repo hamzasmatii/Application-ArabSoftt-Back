@@ -20,6 +20,8 @@ public class User {
     private Long id;
     @Column(unique = true)
     private String identifiantUser;
+    private String email;
+    private Long number;
     private String nom;
     private String prenom;
     private String mdp;
