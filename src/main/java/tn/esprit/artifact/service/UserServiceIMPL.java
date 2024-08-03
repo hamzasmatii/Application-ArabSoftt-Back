@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import tn.esprit.artifact.entity.ServiceEq;
 import tn.esprit.artifact.entity.User;
 import tn.esprit.artifact.repository.UserRepository;
 
@@ -51,12 +52,27 @@ public class UserServiceIMPL implements IUserService {
             if (user.getType() != null) {
                 existingUser.setType(user.getType());
             }
+
             if (user.getPoste() != null) {
                 existingUser.setPoste(user.getPoste());
+            }else{
+                existingUser.setPoste(null);
             }
+
             if (user.getServiceEq() != null) {
                 existingUser.setServiceEq(user.getServiceEq());
+            }else{
+                existingUser.setServiceEq(null);
+
             }
+
+           /* if (user.getChefEquipeService() != null) {
+                existingUser.setChefEquipeService(user.getChefEquipeService());
+            }else{
+                existingUser.setServiceEq(null);
+
+            }*/
+
 
             // Save the updated user entity
             return userRepository.save(existingUser);
@@ -111,6 +127,24 @@ public class UserServiceIMPL implements IUserService {
             return user;
         }
         return null;
+    }
+
+    @Override
+    public User findUsersByServiceEq(Long id) {
+        User user = userRepository.findUsersByServiceEqId(id);
+        if (user != null ) {
+            return user;
+        }
+        return null;
+    }
+
+    public ServiceEq getServiceEqByUserId(Long userId) {
+        // Recherchez l'utilisateur par son ID
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found with ID: " + userId));
+
+        // Renvoyer l'objet ServiceEq associé
+        return user.getServiceEq();
     }
 
 }

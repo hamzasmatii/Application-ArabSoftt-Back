@@ -70,6 +70,11 @@ public class CompetenceController {
         }
     }
 
+    @GetMapping("/competence/by-poste/{jobPositionId}")
+    public List<Competence> getCompetencesByJobPositionId(@PathVariable Long jobPositionId) {
+        return competenceService.getCompetencesByJobPositionId(jobPositionId);
+    }
+
 
 
 }

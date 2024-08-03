@@ -1,5 +1,6 @@
 package tn.esprit.artifact.service;
 
+import tn.esprit.artifact.entity.ServiceEq;
 import tn.esprit.artifact.entity.User;
 
 import java.util.List;
@@ -17,4 +18,8 @@ public interface IUserService {
     User deleteUser(Long id);
 
     public User login(String identifiant, String password);
+
+    public User findUsersByServiceEq(Long id);
+
+    public ServiceEq getServiceEqByUserId(Long userId);
 }

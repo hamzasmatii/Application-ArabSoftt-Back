@@ -53,7 +53,7 @@ public class JobPositionController {
     @DeleteMapping("/jobposition/{jobpositionId}")
     public ResponseEntity<Void> deleteJobPosition(@PathVariable Long jobpositionId) {
         try {
-            JobPosition deletedJobPosition = jobpositionService.deleteJobPosition(jobpositionId);
+          jobpositionService.deleteJobPosition(jobpositionId);
 
             // Create the response message
             String message = "JobPosition with ID " + jobpositionId + " deleted successfully.";

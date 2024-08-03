@@ -69,4 +69,14 @@ public class ServiceEqController {
             return ResponseEntity.notFound().build();
         }
     }
+
+    @GetMapping("/serviceEq/user/{userId}")
+    public ServiceEq getServiceEqByUserId(@PathVariable Long userId) {
+        return serviceEqService.getServiceEqByUserId(userId);
+    }
+
+    @GetMapping("/serviceEq/chef/{userId}")
+    public ServiceEq getServiceEqByChefId(@PathVariable Long userId) {
+        return serviceEqService.getServiceEqByChefId(userId);
+    }
 }

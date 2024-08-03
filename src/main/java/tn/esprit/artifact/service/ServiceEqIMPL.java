@@ -8,6 +8,7 @@ import tn.esprit.artifact.entity.ServiceEq;
 import tn.esprit.artifact.repository.ServiceEqRepository;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 
@@ -34,12 +35,21 @@ public class ServiceEqIMPL implements IServiceEqService {
             if (serviceEq.getNom() != null) {
                 existingServiceEq.setNom(serviceEq.getNom());
             }
+
             if (serviceEq.getChefEquipe() != null) {
                 existingServiceEq.setChefEquipe(serviceEq.getChefEquipe());
+            } else {
+                existingServiceEq.setChefEquipe(null);
             }
-            if (serviceEq.getEmployes() != null && !serviceEq.getEmployes().isEmpty()) {
+
+
+
+            if (serviceEq.getEmployes() != null) {
                 existingServiceEq.setEmployes(serviceEq.getEmployes());
+            } else {
+                existingServiceEq.setEmployes(new HashSet<>()); // Set to empty set if null
             }
+
 
             // Save the updated serviceEq entity
             return serviceEqRepository.save(existingServiceEq);
@@ -85,5 +95,12 @@ public class ServiceEqIMPL implements IServiceEqService {
             throw new IllegalArgumentException("team not found");
         }
 
+    }
+
+    public ServiceEq getServiceEqByUserId(Long userId) {
+        return serviceEqRepository.findByUserId(userId);
+    }
+    public ServiceEq getServiceEqByChefId(Long userId) {
+        return serviceEqRepository.findByChefId(userId);
     }
 }

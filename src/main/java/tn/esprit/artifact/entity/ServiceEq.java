@@ -18,12 +18,11 @@ public class ServiceEq {
     private String nom;
 
     @OneToOne
-    @JoinColumn(name = "chef_equipe_id")
-    @JsonManagedReference
+    @JoinColumn(name = "chefEq_id")
+    @JsonManagedReference("chefEq_service_id")
     private User chefEquipe;
 
-    @OneToMany
-    @JoinColumn(name = "serviceEq_id")
-    @JsonManagedReference
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER,mappedBy = ("serviceEq"))
+    @JsonManagedReference("employe_reference")
     private Set<User> employes;
 }

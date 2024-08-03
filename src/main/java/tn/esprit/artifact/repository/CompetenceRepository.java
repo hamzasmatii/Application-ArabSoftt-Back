@@ -11,4 +11,5 @@ import java.util.List;
 import java.util.Map;
 @Repository
 public interface CompetenceRepository extends JpaRepository<Competence,Long>{
+    List<Competence> findByJobPositionId(Long jobPositionId);
 }

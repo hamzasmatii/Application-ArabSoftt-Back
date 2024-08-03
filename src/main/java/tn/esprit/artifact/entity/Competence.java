@@ -1,6 +1,8 @@
 package tn.esprit.artifact.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -21,10 +23,12 @@ public class Competence {
 
 
     @ManyToOne
-    @JsonIgnore
+    @JoinColumn(name = "job_position_id")
+    @JsonBackReference  // Use if there's a reciprocal reference in JobPosition
     JobPosition jobPosition;
 
     @OneToMany( cascade = CascadeType.ALL,mappedBy = "competence")
+    @JsonManagedReference  // Indicates that this is the parent side of the relationship
     private Set<Evaluation> evaluations;
 
 

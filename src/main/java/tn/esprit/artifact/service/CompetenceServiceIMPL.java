@@ -8,6 +8,7 @@ import tn.esprit.artifact.entity.Competence;
 import tn.esprit.artifact.repository.CompetenceRepository;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 
@@ -37,11 +38,18 @@ public class CompetenceServiceIMPL implements ICompetenceService{
             if (competence.getNom() != null) {
                 existingCompetence.setNom(competence.getNom());
             }
+
             if (competence.getJobPosition() != null) {
                 existingCompetence.setJobPosition(competence.getJobPosition());
+            } else {
+                existingCompetence.setJobPosition(null); // Or handle as appropriate if null should be explicitly set
             }
+
+            // Update Evaluations if it's not null
             if (competence.getEvaluations() != null) {
                 existingCompetence.setEvaluations(competence.getEvaluations());
+            } else {
+                existingCompetence.setEvaluations(new HashSet<>()); // Or handle as appropriate if null should be explicitly set
             }
 
             // Save the updated competence entity
@@ -88,5 +96,10 @@ public class CompetenceServiceIMPL implements ICompetenceService{
             throw new IllegalArgumentException("competence not found");
         }
 
+    }
+
+    @Override
+    public List<Competence> getCompetencesByJobPositionId(Long jobPositionId) {
+        return competenceRepository.findByJobPositionId(jobPositionId);
     }
 }

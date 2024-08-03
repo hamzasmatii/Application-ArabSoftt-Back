@@ -31,13 +31,24 @@ public class User {
 
     @OneToOne
     @JoinColumn(name = "job_position_id")
-    @JsonManagedReference
+    @JsonManagedReference("poste_user_reference")
     private JobPosition poste;
 
-    @ManyToOne
+    @OneToOne(mappedBy = "chefEquipe")
+    @JoinColumn(name = "chefEq_service_id")
+    @JsonBackReference("chefEq_service_id")
+    private ServiceEq serviceEqchef;
+
+
+
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "serviceEq_id")
-    @JsonBackReference
+    @JsonBackReference("employe_reference")
     private ServiceEq serviceEq;
+
+
+
+
 
     @PrePersist
     private void generateIdentifiantUser() {

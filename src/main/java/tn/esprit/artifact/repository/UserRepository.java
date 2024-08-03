@@ -1,5 +1,6 @@
 package tn.esprit.artifact.repository;
 import jakarta.transaction.Transactional;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -12,4 +13,6 @@ import java.util.Map;
 @Repository
 public interface UserRepository extends JpaRepository<User,Long> {
     User findUsersByIdentifiantUser(String identifiant);
+    User findUsersByServiceEqId(Long serviceEqId);
+
 }

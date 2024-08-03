@@ -1,5 +1,6 @@
 package tn.esprit.artifact.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
@@ -18,7 +19,7 @@ public class Evaluation {
     private EvaluationType eval;
 
     @ManyToOne
-    @JsonIgnore
+    @JsonBackReference  // Use if there's a reciprocal reference in JobPosition
     Competence competence;
 
     private int note;

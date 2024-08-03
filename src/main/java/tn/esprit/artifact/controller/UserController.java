@@ -6,6 +6,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import tn.esprit.artifact.entity.ServiceEq;
 import tn.esprit.artifact.entity.User;
 import tn.esprit.artifact.service.IUserService;
 
@@ -97,4 +98,12 @@ public class UserController {
         session.invalidate();
         return "Logout successful";
     }
+
+    @GetMapping("/user/service/{userId}")
+    public ResponseEntity<ServiceEq> getServiceEqByUserId(@PathVariable Long userId) {
+        ServiceEq serviceEq = userService.getServiceEqByUserId(userId);
+        return ResponseEntity.ok(serviceEq);
+    }
+
+
 }

@@ -8,6 +8,7 @@ import tn.esprit.artifact.entity.JobPosition;
 import tn.esprit.artifact.repository.JobPositionRepository;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 
@@ -37,9 +38,13 @@ public class JobPositionIMPL implements IJobPositionService{
             if (jobposition.getNom() != null) {
                 existingJobPosition.setNom(jobposition.getNom());
             }
+
             if (jobposition.getCompetencesRequises() != null) {
                 existingJobPosition.setCompetencesRequises(jobposition.getCompetencesRequises());
+            } else {
+                existingJobPosition.setCompetencesRequises(new HashSet<>()); // Or handle as appropriate if null should be explicitly set
             }
+
 
             // Save the updated job position entity
             return jobpositionRepository.save(existingJobPosition);
