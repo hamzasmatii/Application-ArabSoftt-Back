@@ -16,5 +16,5 @@ public interface ICompetenceService {
 
     Competence deleteCompetence(Long id);
 
-    public List<Competence> getCompetencesByJobPositionId(Long jobPositionId);
+     List<Competence> getCompetencesByJobPositionId(Long jobPositionId);
 }

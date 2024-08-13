@@ -4,8 +4,11 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import tn.esprit.artifact.entity.ServiceEq;
+import tn.esprit.artifact.entity.User;
 import tn.esprit.artifact.repository.ServiceEqRepository;
+import tn.esprit.artifact.repository.UserRepository;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -18,6 +21,9 @@ import java.util.Optional;
 public class ServiceEqIMPL implements IServiceEqService {
     @Autowired
     private ServiceEqRepository serviceEqRepository;
+
+    @Autowired
+    private UserRepository userRepository;
 
     @Override
     public ServiceEq createServiceEq(ServiceEq serviceEq) {
@@ -76,26 +82,41 @@ public class ServiceEqIMPL implements IServiceEqService {
     }
 
     @Override
+    @Transactional
     public ServiceEq deleteServiceEq(Long id) {
-        try{
+        try {
+            // Find the ServiceEq by ID
             Optional<ServiceEq> optionalServiceEq = serviceEqRepository.findById(id);
 
+            // If the ServiceEq does not exist, throw an exception
+            if (!optionalServiceEq.isPresent()) {
+                throw new IllegalArgumentException("ServiceEq not found");
+            }
 
-
-            // If the team exists, retrieve it
+            // Retrieve the ServiceEq entity
             ServiceEq serviceEqToDelete = optionalServiceEq.get();
 
-            // Delete the team by its ID
+            // Step 1: Find all users associated with this ServiceEq ID
+            List<User> users = userRepository.findUsersByServiceEqId(id);
+
+            // Step 2: Update each user to set serviceEq to null
+            for (User user : users) {
+                user.setServiceEq(null);
+                userRepository.save(user);
+            }
+
+            // Step 3: Delete the ServiceEq
             serviceEqRepository.deleteById(id);
 
-            // Return the deleted stage
+            // Return the deleted ServiceEq
             return serviceEqToDelete;
-        } catch(Exception e) {
-            // If the stage does not exist, throw an exception or handle it in any other appropriate way
-            throw new IllegalArgumentException("team not found");
+        } catch (Exception e) {
+            // Handle exceptions appropriately
+            throw new IllegalArgumentException("Error deleting ServiceEq: " + e.getMessage());
         }
-
     }
+
+
 
     public ServiceEq getServiceEqByUserId(Long userId) {
         return serviceEqRepository.findByUserId(userId);

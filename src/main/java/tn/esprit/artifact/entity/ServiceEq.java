@@ -22,7 +22,11 @@ public class ServiceEq {
     @JsonManagedReference("chefEq_service_id")
     private User chefEquipe;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER,mappedBy = ("serviceEq"))
+    @OneToMany(
+            cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH},
+            fetch = FetchType.EAGER,
+            mappedBy = "serviceEq"
+    )
     @JsonManagedReference("employe_reference")
     private Set<User> employes;
 }

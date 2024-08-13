@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import tn.esprit.artifact.entity.Evaluation;
+import tn.esprit.artifact.entity.EvaluationType;
 import tn.esprit.artifact.service.IEvaluationService;
 
 import java.util.List;
@@ -68,6 +69,24 @@ public class EvaluationController {
         catch (Exception e){
             return ResponseEntity.notFound().build();
         }
+    }
+
+    @GetMapping("/evaluation/find-user-competence")
+    public ResponseEntity<List<Evaluation>> findByUserIdAndCompetenceIdAndEval(
+            @RequestParam Long userId,
+            @RequestParam Long compId,
+            @RequestParam EvaluationType eval) {
+        List<Evaluation> evaluations = evaluationService.findByUserIdAndCompetenceIdAndEval(userId, compId, eval);
+        return ResponseEntity.ok(evaluations);
+    }
+
+    @GetMapping("/evaluation/find-user-allcompetence")
+    public ResponseEntity<List<Evaluation>> findByUserIdAndCompetenceId(
+            @RequestParam Long userId,
+            @RequestParam Long compId)
+             {
+        List<Evaluation> evaluations = evaluationService.findByUserIdAndCompetenceId(userId, compId);
+        return ResponseEntity.ok(evaluations);
     }
 
 

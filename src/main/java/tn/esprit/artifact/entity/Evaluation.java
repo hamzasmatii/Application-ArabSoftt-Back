@@ -5,6 +5,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
+import static tn.esprit.artifact.entity.EvaluationType.FORUSER;
+
 @Entity
 @Getter
 @Setter
@@ -19,25 +21,35 @@ public class Evaluation {
     private EvaluationType eval;
 
     @ManyToOne
-    @JsonBackReference  // Use if there's a reciprocal reference in JobPosition
+    @JsonBackReference("competance_evaluation_reference")  // Use if there's a reciprocal reference in JobPosition
     Competence competence;
 
-    private int note;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    @JsonBackReference("evaluation_user_reference")
+    private User user;
+
+    private Long  note;
 
     public void calculNote() {
-        switch (eval) {
-            case EXCELLENT:
-                this.note = 5;
-                break;
-            case SATISFAISANT:
-                this.note = 2;
-                break;
-            case INSATISFAISANT:
-                this.note = 1;
-                break;
+        if (eval != EvaluationType.FORUSER) { // Ensure FORUSER is a valid EvaluationType
+            switch (eval) {
+                case EXCELLENT:
+                    this.note = 5L;
+                    break;
+                case SATISFAISANT:
+                    this.note = 2L;
+                    break;
+                case INSATISFAISANT:
+                    this.note = 1L;
+                    break;
+                default:
+                    throw new IllegalArgumentException("Unknown EvaluationType: " + eval);
+            }
+        } else {
+            this.note = null;
         }
     }
-
 
 
 }

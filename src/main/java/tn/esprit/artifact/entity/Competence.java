@@ -24,11 +24,11 @@ public class Competence {
 
     @ManyToOne
     @JoinColumn(name = "job_position_id")
-    @JsonBackReference  // Use if there's a reciprocal reference in JobPosition
+    @JsonBackReference("competance_poste_reference")    // Use if there's a reciprocal reference in JobPosition
     JobPosition jobPosition;
 
     @OneToMany( cascade = CascadeType.ALL,mappedBy = "competence")
-    @JsonManagedReference  // Indicates that this is the parent side of the relationship
+    @JsonManagedReference("competance_evaluation_reference")    // Indicates that this is the parent side of the relationship
     private Set<Evaluation> evaluations;
 
 

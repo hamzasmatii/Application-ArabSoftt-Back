@@ -20,12 +20,10 @@ public class JobPosition {
     private String nom;
     private String description;
 
-    @OneToOne(mappedBy = "poste")
-    @JsonBackReference("poste_user_reference")
-    private User utilisateurs;
+
 
     @OneToMany( cascade = CascadeType.ALL,mappedBy = "jobPosition")
-    @JsonManagedReference  // Indicates that this is the parent side of the relationship
+    @JsonManagedReference("competance_poste_reference")  // Indicates that this is the parent side of the relationship
     private Set<Competence> competencesRequises;
 
 

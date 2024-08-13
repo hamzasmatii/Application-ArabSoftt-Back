@@ -4,18 +4,19 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import tn.esprit.artifact.entity.ServiceEq;
-import tn.esprit.artifact.entity.User;
+import tn.esprit.artifact.entity.*;
+import tn.esprit.artifact.repository.EvaluationRepository;
 import tn.esprit.artifact.repository.UserRepository;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @AllArgsConstructor
 @Slf4j
 public class UserServiceIMPL implements IUserService {
+
+    @Autowired
+    private EvaluationRepository evaluationRepository;
 
     @Autowired
     private UserRepository userRepository;
@@ -53,10 +54,10 @@ public class UserServiceIMPL implements IUserService {
                 existingUser.setType(user.getType());
             }
 
-            if (user.getPoste() != null) {
-                existingUser.setPoste(user.getPoste());
+            if (user.getEvaluations() != null) {
+                existingUser.setEvaluations(user.getEvaluations());
             }else{
-                existingUser.setPoste(null);
+                existingUser.setEvaluations(new HashSet<>());
             }
 
             if (user.getServiceEq() != null) {
@@ -130,14 +131,14 @@ public class UserServiceIMPL implements IUserService {
     }
 
     @Override
-    public User findUsersByServiceEq(Long id) {
-        User user = userRepository.findUsersByServiceEqId(id);
+    public List<User> findUsersByServiceEq(Long id) {
+        List<User> user = userRepository.findUsersByServiceEqId(id);
         if (user != null ) {
             return user;
         }
         return null;
     }
-
+    @Override
     public ServiceEq getServiceEqByUserId(Long userId) {
         // Recherchez l'utilisateur par son ID
         User user = userRepository.findById(userId)
@@ -145,6 +146,55 @@ public class UserServiceIMPL implements IUserService {
 
         // Renvoyer l'objet ServiceEq associé
         return user.getServiceEq();
+    }
+    @Override
+    public List<User> getChefsWithoutServiceEq() {
+        return userRepository.findChefsWithoutServiceEq(UserType.CHEF_EQUIPE);
+    }
+    @Override
+    public List<User> getUsersWithoutServiceEq() {
+        return userRepository.findUsersWithoutServiceEq(UserType.EMPLOYE);
+    }
+
+
+    @Override
+    public JobPosition getJobPositionFromUserId(Long userId) {
+        // Retrieve all evaluations of type FORUSER for the given user
+        List<Evaluation> evaluations = evaluationRepository.findByUserIdAndEval(userId, EvaluationType.FORUSER);
+
+        if (evaluations.isEmpty()) {
+            // Handle the case where no evaluations are found
+            return null; // or return new JobPosition();
+        }
+
+        // Create a new JobPosition object to return
+        JobPosition jobPositionToReturn = new JobPosition();
+
+        // Create a Set to hold all unique competences related to the evaluations
+        Set<Competence> filteredCompetences = new HashSet<>();
+
+        // Iterate over all evaluations
+        for (Evaluation evaluation : evaluations) {
+            Competence competence = evaluation.getCompetence();
+            if (competence != null) {
+                filteredCompetences.add(competence);
+
+                // Set the basic job position details from the first evaluation's job position
+                if (jobPositionToReturn.getId() == null) {
+                    JobPosition originalJobPosition = competence.getJobPosition();
+                    if (originalJobPosition != null) {
+                        jobPositionToReturn.setId(originalJobPosition.getId());
+                        jobPositionToReturn.setNom(originalJobPosition.getNom());
+                        jobPositionToReturn.setDescription(originalJobPosition.getDescription());
+                    }
+                }
+            }
+        }
+
+        // Set the collected competences to the JobPosition object
+        jobPositionToReturn.setCompetencesRequises(filteredCompetences);
+
+        return jobPositionToReturn;
     }
 
 }

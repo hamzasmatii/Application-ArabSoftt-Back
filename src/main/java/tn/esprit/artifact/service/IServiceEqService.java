@@ -14,7 +14,7 @@ public interface IServiceEqService {
     ServiceEq getServiceEqById(Long id);
 
     ServiceEq deleteServiceEq(Long id);
-    public ServiceEq getServiceEqByUserId(Long userId);
+     ServiceEq getServiceEqByUserId(Long userId);
 
-    public ServiceEq getServiceEqByChefId(Long userId);
+     ServiceEq getServiceEqByChefId(Long userId);
 }

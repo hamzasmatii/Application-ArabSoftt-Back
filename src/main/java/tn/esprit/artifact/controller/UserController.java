@@ -6,6 +6,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import tn.esprit.artifact.entity.JobPosition;
 import tn.esprit.artifact.entity.ServiceEq;
 import tn.esprit.artifact.entity.User;
 import tn.esprit.artifact.service.IUserService;
@@ -105,5 +106,42 @@ public class UserController {
         return ResponseEntity.ok(serviceEq);
     }
 
+    @GetMapping("/user/chefs-without-service")
+    public ResponseEntity<List<User>> getChefsWithoutServiceEq() {
+        List<User> chefsWithoutService = userService.getChefsWithoutServiceEq();
 
+        if (chefsWithoutService.isEmpty()) {
+            return ResponseEntity.noContent().build();  // 204 No Content if the list is empty
+        }
+
+        return ResponseEntity.ok(chefsWithoutService);  // 200 OK with the list of users
+    }
+
+    @GetMapping("/user/without-service")
+    public ResponseEntity<List<User>> getUsersWithoutServiceEq() {
+        List<User> usersWithoutService = userService.getUsersWithoutServiceEq();
+
+        if (usersWithoutService.isEmpty()) {
+            return ResponseEntity.noContent().build(); // 204 No Content if the list is empty
+        }
+
+        return ResponseEntity.ok(usersWithoutService); // 200 OK with the list of users
+    }
+
+    @GetMapping("/user/liste-users-service/{EqId}")
+    public ResponseEntity<List<User>> findUsersByServiceEqId(@PathVariable Long EqId) {
+        List<User> chefsWithoutService = userService.findUsersByServiceEq(EqId);
+
+        if (chefsWithoutService.isEmpty()) {
+            return ResponseEntity.noContent().build();  // 204 No Content if the list is empty
+        }
+
+        return ResponseEntity.ok(chefsWithoutService);  // 200 OK with the list of users
+    }
+
+    @GetMapping("/user/job-position/{userId}")
+    public ResponseEntity<JobPosition> getJobPositionForUser(@PathVariable Long userId) {
+        JobPosition jobPosition = userService.getJobPositionFromUserId(userId);
+        return ResponseEntity.ok(jobPosition);
+    }
 }

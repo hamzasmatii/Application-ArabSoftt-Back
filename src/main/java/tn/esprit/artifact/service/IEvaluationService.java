@@ -1,6 +1,7 @@
 package tn.esprit.artifact.service;
 
 import tn.esprit.artifact.entity.Evaluation;
+import tn.esprit.artifact.entity.EvaluationType;
 
 import java.util.List;
 
@@ -14,4 +15,8 @@ public interface IEvaluationService {
     Evaluation getEvaluationById(Long id);
 
     Evaluation deleteEvaluation(Long id);
+
+     List<Evaluation> findByUserIdAndCompetenceIdAndEval(Long userId, Long competenceId, EvaluationType eval) ;
+
+     List<Evaluation> findByUserIdAndCompetenceId(Long userId, Long competenceId);
 }

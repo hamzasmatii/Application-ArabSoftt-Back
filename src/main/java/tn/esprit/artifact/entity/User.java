@@ -6,6 +6,7 @@ import lombok.*;
 
 import jakarta.persistence.*;
 
+import java.util.Set;
 import java.util.UUID;
 
 @Entity
@@ -29,15 +30,12 @@ public class User {
     @Enumerated(EnumType.STRING)
     private UserType type;
 
-    @OneToOne
-    @JoinColumn(name = "job_position_id")
-    @JsonManagedReference("poste_user_reference")
-    private JobPosition poste;
+
 
     @OneToOne(mappedBy = "chefEquipe")
     @JoinColumn(name = "chefEq_service_id")
     @JsonBackReference("chefEq_service_id")
-    private ServiceEq serviceEqchef;
+    private ServiceEq chefEquipeService;
 
 
 
@@ -45,6 +43,10 @@ public class User {
     @JoinColumn(name = "serviceEq_id")
     @JsonBackReference("employe_reference")
     private ServiceEq serviceEq;
+
+    @OneToMany( mappedBy = "user")
+    @JsonManagedReference("evaluation_user_reference")  // Indicates that this is the parent side of the relationship
+    private Set<Evaluation> evaluations;
 
 
 

@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tn.esprit.artifact.entity.Evaluation;
+import tn.esprit.artifact.entity.EvaluationType;
 import tn.esprit.artifact.repository.EvaluationRepository;
 
 import java.util.ArrayList;
@@ -85,4 +86,15 @@ public class EvaluationServiceIMPL implements IEvaluationService{
         }
 
     }
+
+    @Override
+    public List<Evaluation> findByUserIdAndCompetenceIdAndEval(Long userId, Long competenceId, EvaluationType eval) {
+        return evaluationRepository.findByUserIdAndCompetenceIdAndEval(userId, competenceId, eval);
+    }
+
+    @Override
+    public List<Evaluation> findByUserIdAndCompetenceId(Long userId, Long competenceId) {
+        return evaluationRepository.findByUserIdAndCompetenceId(userId, competenceId);
+    }
+
 }
