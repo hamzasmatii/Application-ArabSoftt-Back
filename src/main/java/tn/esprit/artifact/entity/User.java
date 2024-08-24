@@ -1,11 +1,14 @@
 package tn.esprit.artifact.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 
 import jakarta.persistence.*;
 
+import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
@@ -30,6 +33,8 @@ public class User {
     @Enumerated(EnumType.STRING)
     private UserType type;
 
+    private Double notePoste;
+
 
 
     @OneToOne(mappedBy = "chefEquipe")
@@ -47,6 +52,10 @@ public class User {
     @OneToMany( mappedBy = "user")
     @JsonManagedReference("evaluation_user_reference")  // Indicates that this is the parent side of the relationship
     private Set<Evaluation> evaluations;
+
+    @ManyToMany(mappedBy = "users")
+    @JsonIgnore
+    private Set<Formation> formation ;
 
 
 

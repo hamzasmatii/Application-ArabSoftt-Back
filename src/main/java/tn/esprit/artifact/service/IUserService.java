@@ -29,4 +29,6 @@ public interface IUserService {
      List<User> getUsersWithoutServiceEq();
 
      JobPosition getJobPositionFromUserId(Long userId);
+
+     List<User> getUsersByFormationId(Long formationId);
 }

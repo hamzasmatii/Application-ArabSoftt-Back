@@ -22,4 +22,7 @@ public interface UserRepository extends JpaRepository<User,Long> {
     @Query("SELECT u FROM User u WHERE u.type = :type AND u.serviceEq IS NULL")
     List<User> findUsersWithoutServiceEq(@Param("type") UserType type);
 
+    @Query("SELECT u FROM User u JOIN u.formation f WHERE f.id = :formationId")
+    List<User> findUsersByFormationId(@Param("formationId") Long formationId);
+
 }

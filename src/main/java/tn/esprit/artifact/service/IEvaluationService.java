@@ -19,4 +19,8 @@ public interface IEvaluationService {
      List<Evaluation> findByUserIdAndCompetenceIdAndEval(Long userId, Long competenceId, EvaluationType eval) ;
 
      List<Evaluation> findByUserIdAndCompetenceId(Long userId, Long competenceId);
+
+     void deleteEvaluationsByUserId(Long userId);
+     List<Evaluation> getAllEvaluationsByUserIdAndCompetenceIdWithoutForUser(Long userId, Long competenceId);
+      Double calculateAndAssignAverageNote(Long userId, Long competenceId);
 }

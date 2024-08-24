@@ -35,6 +35,7 @@ public class CompetenceServiceIMPL implements ICompetenceService{
             if (competence.getDescription() != null) {
                 existingCompetence.setDescription(competence.getDescription());
             }
+
             if (competence.getNom() != null) {
                 existingCompetence.setNom(competence.getNom());
             }

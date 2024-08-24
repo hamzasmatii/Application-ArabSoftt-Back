@@ -23,6 +23,7 @@ public class UserServiceIMPL implements IUserService {
 
     @Override
     public User createUser(User user) {
+        user.setNotePoste(0.0);
         return userRepository.save(user);
     }
 
@@ -65,6 +66,10 @@ public class UserServiceIMPL implements IUserService {
             }else{
                 existingUser.setServiceEq(null);
 
+            }if (user.getFormation() != null) {
+                existingUser.setFormation(user.getFormation());
+            } else {
+                existingUser.setFormation(new HashSet<>()); // Or handle as appropriate if null should be explicitly set
             }
 
            /* if (user.getChefEquipeService() != null) {
@@ -173,6 +178,9 @@ public class UserServiceIMPL implements IUserService {
         // Create a Set to hold all unique competences related to the evaluations
         Set<Competence> filteredCompetences = new HashSet<>();
 
+        double totalNotes = 0.0;
+        int noteCount = 0;
+
         // Iterate over all evaluations
         for (Evaluation evaluation : evaluations) {
             Competence competence = evaluation.getCompetence();
@@ -188,13 +196,36 @@ public class UserServiceIMPL implements IUserService {
                         jobPositionToReturn.setDescription(originalJobPosition.getDescription());
                     }
                 }
+
+                // Accumulate the notes for the competencies
+                Double note = evaluation.getNote();
+                if (note != null) {
+                    totalNotes += note;
+                    noteCount++;
+                }
             }
         }
 
         // Set the collected competences to the JobPosition object
         jobPositionToReturn.setCompetencesRequises(filteredCompetences);
 
+        // Calculate the average note
+        double averageNote = (noteCount > 0) ? totalNotes / noteCount : 0.00;
+
+        // Assign the calculated average note to user.notePoste
+        User user = evaluations.get(0).getUser();
+        if (user != null) {
+            user.setNotePoste(averageNote); // Assuming User has a setNotePoste method
+            userRepository.save(user); // Persist the changes to the user
+        }
+
         return jobPositionToReturn;
     }
+
+    @Override
+    public List<User> getUsersByFormationId(Long formationId) {
+        return userRepository.findUsersByFormationId(formationId);
+    }
+
 
 }

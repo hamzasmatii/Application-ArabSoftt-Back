@@ -87,6 +87,7 @@ public class UserController {
             session.setAttribute("user", user);
             response.put("message", "Login successful");
             response.put("role", user.getType());
+            response.put("id", user.getId());
         } else {
             response.put("message", "Invalid credentials");
         }
@@ -144,4 +145,12 @@ public class UserController {
         JobPosition jobPosition = userService.getJobPositionFromUserId(userId);
         return ResponseEntity.ok(jobPosition);
     }
+
+    @GetMapping("/user/by-formation/{formationId}")
+    public ResponseEntity<List<User>> getUsersByFormation(@PathVariable Long formationId) {
+        List<User> users = userService.getUsersByFormationId(formationId);
+        return new ResponseEntity<>(users, HttpStatus.OK);
+    }
+
+
 }

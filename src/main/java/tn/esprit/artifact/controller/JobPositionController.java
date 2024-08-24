@@ -6,9 +6,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import tn.esprit.artifact.entity.JobPosition;
+import tn.esprit.artifact.entity.User;
 import tn.esprit.artifact.service.IJobPositionService;
 
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/api")
@@ -68,5 +70,10 @@ public class JobPositionController {
         catch (Exception e){
             return ResponseEntity.notFound().build();
         }
+    }
+
+    @PostMapping("/jobposition/users/{posteId}")
+    public Set<User> getUsersForJobPosition(@PathVariable Long posteId) {
+        return jobpositionService.getUsersForJobPosition(posteId);
     }
 }

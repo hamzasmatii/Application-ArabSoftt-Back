@@ -71,7 +71,7 @@ public class EvaluationController {
         }
     }
 
-    @GetMapping("/evaluation/find-user-competence")
+    @GetMapping("/evaluation/find-user-competence")//forUser
     public ResponseEntity<List<Evaluation>> findByUserIdAndCompetenceIdAndEval(
             @RequestParam Long userId,
             @RequestParam Long compId,
@@ -87,6 +87,28 @@ public class EvaluationController {
              {
         List<Evaluation> evaluations = evaluationService.findByUserIdAndCompetenceId(userId, compId);
         return ResponseEntity.ok(evaluations);
+    }
+
+    @DeleteMapping("/evaluation/delete-by-user/{userId}")
+    public ResponseEntity<String> deleteEvaluationsByUser(@PathVariable Long userId) {
+        evaluationService.deleteEvaluationsByUserId(userId);
+        return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/evaluation/find-user-allcompetence-withouforuser")
+    public List<Evaluation> getEvaluationsByUserIdAndCompetenceId(
+            @RequestParam Long userId,
+            @RequestParam Long competenceId) {
+        return evaluationService.getAllEvaluationsByUserIdAndCompetenceIdWithoutForUser(userId, competenceId);
+    }
+
+    @PostMapping("/evaluation/calculate-note-competence")
+    public ResponseEntity<Double> calculateAndAssignAverageNote(
+            @RequestParam Long userId,
+            @RequestParam Long competenceId) {
+
+        Double averageNote = evaluationService.calculateAndAssignAverageNote(userId, competenceId);
+        return ResponseEntity.ok(averageNote);
     }
 
 

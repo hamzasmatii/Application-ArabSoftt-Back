@@ -4,13 +4,13 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import tn.esprit.artifact.entity.Competence;
+import tn.esprit.artifact.entity.Evaluation;
 import tn.esprit.artifact.entity.JobPosition;
+import tn.esprit.artifact.entity.User;
 import tn.esprit.artifact.repository.JobPositionRepository;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @AllArgsConstructor
@@ -34,9 +34,13 @@ public class JobPositionIMPL implements IJobPositionService{
             // Update fields only if they are not null
             if (jobposition.getDescription() != null) {
                 existingJobPosition.setDescription(jobposition.getDescription());
+            }else {
+                existingJobPosition.setDescription(null); // Or handle as appropriate if null should be explicitly set
             }
             if (jobposition.getNom() != null) {
                 existingJobPosition.setNom(jobposition.getNom());
+            }else {
+                existingJobPosition.setNom(null); // Or handle as appropriate if null should be explicitly set
             }
 
             if (jobposition.getCompetencesRequises() != null) {
@@ -90,5 +94,26 @@ public class JobPositionIMPL implements IJobPositionService{
             throw new IllegalArgumentException("jobposition not found");
         }
 
+    }
+
+    @Override
+    public Set<User> getUsersForJobPosition(Long posteId) {
+        // Fetch JobPosition by ID
+        JobPosition jobPosition = jobpositionRepository.findById(posteId)
+                .orElseThrow(() -> new RuntimeException("JobPosition not found"));
+
+        // Get Competences related to the JobPosition
+        Set<Competence> competences = jobPosition.getCompetencesRequises();
+
+        // Get Users who have evaluations for the Competences
+        Set<User> users = new HashSet<>();
+        for (Competence competence : competences) {
+            Set<Evaluation> evaluations = competence.getEvaluations();
+            for (Evaluation evaluation : evaluations) {
+                users.add(evaluation.getUser());
+            }
+        }
+
+        return users;
     }
 }
